@@ -1,6 +1,6 @@
 import argparse
 
-from commands import log_task, show_tasks
+from cli import log_task, show_tasks
 
 def main():
     parser = argparse.ArgumentParser(description="Tuits CLI")
