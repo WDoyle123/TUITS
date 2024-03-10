@@ -11,15 +11,10 @@ To get started with TUITS, you'll need to have Python 3 installed on your system
 git clone https://github.com/wdoyle123/tuits.git
 ```
 
-2. **Make the script executable**:
+2. **Install TUITS**:
 ```
-cd tuits/tuits
-chmod +x tuits.py
-```
-
-3. **Make TUITS accessable globally using a symlink**:
-```
-ln -s tuits.py /usr/local/bin/tuits
+cd tuits 
+python3 setup.py install
 ```
 
 ## Usage
