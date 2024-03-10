@@ -1,9 +1,9 @@
 import argparse
 
-from cli.log_task import log_task
-from cli.show_tasks import show_tasks
+from tuits.cli.log_task import log_task
+from tuits.cli.show_tasks import show_tasks
 
-from data.init_db import init_db
+from tuits.data.init_db import init_db
 
 def main():
     

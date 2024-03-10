@@ -1,7 +1,9 @@
-import sqlite3 
+import sqlite3
+from pkg_resources import resource_filename
 
 def init_db():
-    conn = sqlite3.connect('data/tuits.db')
+    db_path = resource_filename('tuits.data', 'tuits.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
                    CREATE TABLE IF NOT EXISTS tasks (
@@ -13,3 +15,4 @@ def init_db():
                    ''')
     conn.commit()
     conn.close()
+
