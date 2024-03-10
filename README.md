@@ -1,23 +1,46 @@
-## What is TUITS?
+# TUITS - Terminal User Interface Time Sheet
 
-TUITS is a Terminal User Interface Time Sheet. 
+TUITS is a simple, command-line based tool designed to help you log your work hours with ease. Using simple commands, you can log tasks, view completed tasks over different time periods, and manage your workday start and end times. TUITS stores your logs in an SQLite database for easy tracking and management.
 
-With simple commands such as:
+## Setup
+
+To get started with TUITS, you'll need to have Python 3 installed on your system. Once you have Python 3, follow these steps to set up TUITS:
+
+1. **Clone TUITS**: 
 ```
-tuits log 'Shell Meeting' -m 'We discussed the new oil reports'
+git clone https://github.com/wdoyle123/tuits.git
 ```
 
-You can log you hours.
+2. **Make the script executable**:
+```
+cd tuits/tuits
+chmod +x tuits.py
+```
 
-This works by at the start of the working day you do:
+3. **Make TUITS accessable globally using a symlink**:
+```
+ln -s tuits.py /usr/local/bin/tuits
+```
+
+## Usage
+
+### Start Your Day
+To start logging your workday, simply run:
 ```
 tuits start
 ```
 
-And tuits creates a new record for the day
+This command creates a new record for the day indicting a start time.
 
-then you can log your first job of the day
+### Logging Tasks 
+To log a task use `log` command with a job and message:
+```
+tuits log 'ExampleJob' -m 'Example message describing the task complete'
+```
 
-This will give you a duration and a timestamp for each event.
-
-The logs are stored in an sqlite database
+### Viewing Logged Tasks 
+You can view tasks you have completed within different time frames:
+```
+tuits show day 
+```
+Replace day with week, month or year to view tasks completed within those time frames.
