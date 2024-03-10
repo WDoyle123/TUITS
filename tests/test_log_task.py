@@ -25,7 +25,9 @@ class TestLogTask(unittest.TestCase):
         log_task(args)
         
         # Assert the SQLite connection was called with the expected database path
-        mock_sqlite.connect.assert_called_with('../data/tuits.db')
+        expected_db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tuits', 'data', 'tuits.db'))
+        mock_sqlite.connect.assert_called_with(expected_db_path)
+
         
         # Assert the cursor executed an INSERT command with the expected values
         mock_cursor.execute.assert_called()

@@ -1,7 +1,7 @@
 import sqlite3 
 
 def init_db():
-    conn = sqlite3.connect('tuits.db')
+    conn = sqlite3.connect('data/tuits.db')
     cursor = conn.cursor()
     cursor.execute('''
                    CREATE TABLE IF NOT EXISTS tasks (

@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from datetime import datetime
 
 def log_task(args):
@@ -7,7 +8,9 @@ def log_task(args):
     message = args.message
 
     # locate database
-    database_path = '../data/tuits.db'
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    database_path = os.path.join(base_dir,'data', 'tuits.db')
 
     # set the time the command was issued
     timestamp = datetime.now().strftime("%H:%M %d/%m/%y")

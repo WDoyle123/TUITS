@@ -1,4 +1,5 @@
 import os
+from os.path import exists
 import sys
 import sqlite3
 import unittest
@@ -7,7 +8,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "t
 from init_db import init_db
 
 class TestDBInit(unittest.TestCase):
-    db_path = 'tuits.db'
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data'))
+    db_filename = 'tuits.db'
+    db_path = os.path.join(base_dir, db_filename)
+
+    @classmethod
+    def setUpClass(cls):
+        os.makedirs(cls.base_dir, exist_ok=True)
 
     def setUp(self):
         # Ensure the database is deleted before each test (if it exists)
@@ -48,6 +55,10 @@ class TestDBInit(unittest.TestCase):
         # Clean up by deleting the database file after each test
         if os.path.exists(self.db_path):
             os.remove(self.db_path)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.rmdir(cls.base_dir)
 
 if __name__ == '__main__':
     unittest.main()

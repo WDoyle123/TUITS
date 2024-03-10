@@ -1,6 +1,6 @@
 import argparse
 
-from cli import log_task, show_tasks
+from cli.log_task import log_task
 from data.init_db import init_db
 
 def main():
@@ -16,11 +16,6 @@ def main():
     log_parser.add_argument('job', help='Job name or identifer')
     log_parser.add_argument('-m', '--message', required=False, default='', help='Message for the log entry')
     log_parser.set_defaults(func=log_task)
-
-    # Show commands
-    show_parser = subparsers.add_parser('show', help='Show logged tasks')
-    # args for day and week so far
-    show_parser.set_defaults(func=show_tasks)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
