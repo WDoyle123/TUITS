@@ -1,8 +1,12 @@
 import argparse
 
 from cli import log_task, show_tasks
+from data.init_db import init_db
 
 def main():
+    
+    init_db()
+
     parser = argparse.ArgumentParser(description="Tuits CLI")
     subparsers = parser.add_subparsers(help='commands')
     subparsers.required = True
