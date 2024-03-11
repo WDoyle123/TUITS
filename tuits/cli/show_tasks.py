@@ -30,8 +30,9 @@ def get_start_date(date_range):
 def format_output(row, date_range):
     # Extract information from the row
     job, message, timestamp_str = row[1], row[2], row[3]
+
     # Parse the timestamp string from the database format to a datetime object
-    timestamp = datetime.strptime(timestamp_str, "%H:%M %d/%m/%y")
+    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M")
 
     # Format the output based on the date_range
     if date_range == 'day':
@@ -67,9 +68,9 @@ def show_tasks(args):
     if start_date is None:
         print(f"Error: start_date is None for date_range '{date_range}")
         return
-
-    start_date_str = start_date.strftime("%H:%M %d/%m/%y")
-    query = "SELECT * FROM tasks WHERE timestamp >= ? ORDER BY timestamp DESC"
+    
+    query = "SELECT * FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
+    start_date_str = start_date.strftime("%Y-%m-%d %H:%M") # Adjust format to YYYY-MM-DD for better compatibility
     cursor.execute(query, (start_date_str,))
 
     rows = cursor.fetchall()
