@@ -40,6 +40,7 @@ tuits show day
 Replace day with week, month or year to view tasks completed within those time frames.
 
 Here is an example of the output:
+
 ```
 +--------+------------------------------------------------+--------+
 | Job    | Message                                        | Time   |
