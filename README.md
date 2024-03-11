@@ -41,18 +41,11 @@ Replace day with week, month or year to view tasks completed within those time f
 
 Here is an example of the output:
 
-```
-+--------+------------------------------------------------+--------+
-| Job    | Message                                        | Time   |
-+========+================================================+========+
-| Finish | ##########                                     | 20:36  |
-+--------+------------------------------------------------+--------+
-| Job1   | Back to finding the answer here!               | 20:36  |
-+--------+------------------------------------------------+--------+
-| Job2   | Long client meeting but resolved the gas leak! | 20:36  |
-+--------+------------------------------------------------+--------+
-| Job1   | Figure this stuff out                          | 20:35  |
-+--------+------------------------------------------------+--------+
-| Start  | ##########                                     | 20:35  |
-+--------+------------------------------------------------+--------+
+| Job    | Message                                        | Time  |
+|--------|------------------------------------------------|-------|
+| Finish | ##########                                     | 20:36 |
+| Job1   | Back to finding the answer here!               | 20:36 |
+| Job2   | Long client meeting but resolved the gas leak! | 20:36 |
+| Job1   | Figure this stuff out                          | 20:35 |
+| Start  | ##########                                     | 20:35 |
 
