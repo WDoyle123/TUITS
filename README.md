@@ -8,7 +8,8 @@ To get started with TUITS, you'll need to have Python 3 installed on your system
 
 1. **Clone TUITS**: 
 ```
-git clone https://github.com/wdoyle123/tuits.git ```
+git clone https://github.com/wdoyle123/tuits.git
+```
 
 2. **Install TUITS**:
 ```
@@ -20,6 +21,7 @@ python3 setup.py install
 
 ### Start Your Day
 To start logging your workday, simply run:
+
 ```
 tuits start
 ```
@@ -28,17 +30,19 @@ This command creates a new record for the day indicting a start time.
 
 ### Logging Tasks 
 To log a task use `log` command with a job and message:
+
 ```
 tuits log 'ExampleJob' -m 'Example message describing the task complete'
 ```
 
 ### Viewing Logged Tasks 
 You can view tasks you have completed within different time frames:
+
 ```
 tuits show day 
 ```
-Replace day with week, month or year to view tasks completed within those time frames.
 
+Replace day with week, month or year to view tasks completed within those time frames.
 Here is an example of the output:
 
 | Job    | Message                                        | Time  |
