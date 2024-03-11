@@ -16,7 +16,7 @@ def finish_day(args=None):
         print("Finish for today has already been logged")
         return
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cursor.execute("INSERT INTO tasks (job, message, timestamp) VALUES ('Finish', '##########', ?)", (timestamp,))
 
     conn.commit()
