@@ -13,7 +13,7 @@ def log_task(args):
     database_path = os.path.join(base_dir,'data', 'tuits.db')
 
     # set the time the command was issued
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # connect to the database
     conn = sqlite3.connect(database_path)

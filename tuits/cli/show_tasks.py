@@ -32,7 +32,7 @@ def format_output(row, date_range):
     job, message, timestamp_str = row[1], row[2], row[3]
 
     # Parse the timestamp string from the database format to a datetime object
-    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M")
+    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
 
     # Format the output based on the date_range
     if date_range == 'day':
