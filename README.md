@@ -43,9 +43,9 @@ Here is an example of the output:
 
 | Job    | Message                                        | Time  |
 |--------|------------------------------------------------|-------|
-| Finish | ##########                                     | 20:36 |
-| Job1   | Back to finding the answer here!               | 20:36 |
-| Job2   | Long client meeting but resolved the gas leak! | 20:36 |
-| Job1   | Figure this stuff out                          | 20:35 |
-| Start  | ##########                                     | 20:35 |
-
+| Finish | ##########                                     | 16:30 |
+| Job3   | Meeting with Company                           | 16:30 |
+| Job2   | Back to finding the answer here!               | 15:30 |
+| Lunch  | ##########                                     | 13:30 |
+| Job1   | Figure this stuff out                          | 12:30 |
+| Start  | ##########                                     | 09:00 |
