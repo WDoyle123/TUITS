@@ -2,6 +2,8 @@ import argparse
 
 from tuits.cli.log_task import log_task
 from tuits.cli.show_tasks import show_tasks
+from tuits.cli.start import start_day
+from tuits.cli.finish import finish_day
 
 from tuits.data.init_db import init_db
 
@@ -12,6 +14,14 @@ def main():
     parser = argparse.ArgumentParser(description="Tuits CLI")
     subparsers = parser.add_subparsers(help='commands')
     subparsers.required = True
+
+    # Start command
+    start_parser = subparsers.add_parser('start', help="Used to log the start of the workday")
+    start_parser.set_defaults(func=start_day)
+
+    # End command
+    finish_parser = subparsers.add_parser('finish', help="Used to log the end of the workday")
+    finish_parser.set_defaults(func=finish_day)
 
     # Log commands
     log_parser = subparsers.add_parser('log', help='Log a new task')
