@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from datetime import datetime, timedelta
+from tabulate import tabulate
 
 def get_start_date(date_range):
     now = datetime.now()
@@ -70,12 +71,22 @@ def show_tasks(args):
         return
     
     query = "SELECT * FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
-    start_date_str = start_date.strftime("%Y-%m-%d %H:%M") # Adjust format to YYYY-MM-DD for better compatibility
+    start_date_str = start_date.strftime("%Y-%m-%d %H:%M")  # Adjust format to YYYY-MM-DD for better compatibility
     cursor.execute(query, (start_date_str,))
 
     rows = cursor.fetchall()
-    for row in rows:
-        formatted_row = format_output(row, date_range)
-        print(formatted_row)
+    formatted_rows = [format_output(row, date_range).split(' - ') for row in rows]
+
+    # Determine headers based on the date range
+    if date_range == 'day':
+        headers = ["Job", "Message", "Time"]
+    elif date_range == 'week':
+        headers = ["Job", "Message", "Time", "Day"]
+    elif date_range == 'month':
+        headers = ["Job", "Message", "Time", "Date"]
+    else:  # Handles 'year' or any unexpected range with a default
+        headers = ["Job", "Message", "Time", "Date"]
+
+    print(tabulate(formatted_rows, headers=headers, tablefmt="grid"))
 
     conn.close()

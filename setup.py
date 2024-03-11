@@ -15,6 +15,7 @@ setup(
         'tuits': ['data/*.db'],
     },
     install_requires=[
+        'tabulate'
     ],
     entry_points={
         'console_scripts': [
