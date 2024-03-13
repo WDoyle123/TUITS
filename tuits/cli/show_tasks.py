@@ -28,26 +28,30 @@ def get_start_date(date_range):
 
     return start_date
 
-def format_output(row, date_range):
-    # Extract information from the row
-    job, message, timestamp_str = row[1], row[2], row[3]
+def format_output(row, date_range, include_id=False):
+    # Extract information from the row.
+    id, job, message, timestamp_str = row
 
     # Parse the timestamp string from the database format to a datetime object
     timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
 
-    # Format the output based on the date_range
+    # Initialize the output list, conditionally including the ID
+    output = [id] if include_id else []
+
+    # Add job and message based on the date_range
+    output.append(job)
+
+    # Format and append the timestamp based on the date_range
     if date_range == 'day':
-        return f"{job} - {message} - {timestamp.strftime('%H:%M')}"
+        output.append(message)
+        output.append(timestamp.strftime('%H:%M'))
     elif date_range == 'week':
-        # Get the day name (e.g., Monday)
         day_name = timestamp.strftime('%A')
-        return f"{job} - {message} - {timestamp.strftime('%H:%M')} - {day_name}"
-    elif date_range == 'month':
-        # Return the date in the format: hour:minute - day/month/year
-        return f"{job} - {message} - {timestamp.strftime('%H:%M - %d/%m/%y')}"
-    else:
-        # Default format if not 'day', 'week', or 'month' (handles 'year' or any unexpected range)
-        return f"{job} - {message} - {timestamp.strftime('%H:%M - %d/%m/%y')}"
+        output.extend([message, timestamp.strftime('%H:%M'), day_name])
+    elif date_range == 'month' or date_range == 'year':
+        output.extend([message, timestamp.strftime('%H:%M - %d/%m/%y')])
+
+    return output
 
 def show_tasks(args):
     # Get the args from the command
@@ -75,17 +79,12 @@ def show_tasks(args):
     cursor.execute(query, (start_date_str,))
 
     rows = cursor.fetchall()
-    formatted_rows = [format_output(row, date_range).split(' - ') for row in rows]
+    formatted_rows = [format_output(row, date_range, args.identifier) for row in rows]
 
-    # Determine headers based on the date range
-    if date_range == 'day':
-        headers = ["Job", "Message", "Time"]
-    elif date_range == 'week':
-        headers = ["Job", "Message", "Time", "Day"]
-    elif date_range == 'month':
-        headers = ["Job", "Message", "Time", "Date"]
-    else:  # Handles 'year' or any unexpected range with a default
-        headers = ["Job", "Message", "Time", "Date"]
+    # Determine headers based on the date range and identifier
+    headers = ["Job", "Message", "Time", "Day"] if date_range == 'week' else ["Job", "Message", "Time", "Date"]
+    if args.identifier:
+        headers.insert(0, "ID")  
 
     print(tabulate(formatted_rows, headers=headers, tablefmt="grid"))
 
