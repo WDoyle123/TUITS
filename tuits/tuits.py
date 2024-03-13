@@ -32,6 +32,7 @@ def main():
     # Show commands
     show_parser = subparsers.add_parser('show', help='Show logged tasks')
     show_parser.add_argument('show', help='day, week, month, year')
+    show_parser.add_argument('-i', '--identifier', required=False, action='store_true', help='Show ids for the logs')
     show_parser.set_defaults(func=show_tasks)
 
     args = parser.parse_args()
