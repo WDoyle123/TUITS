@@ -6,20 +6,18 @@ on:
 
 concurrency: production
 jobs:
-  VersionModules:
+  Version:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'
-    - name: Conventional Commits Version Bump for Modules
+
+    - name: Conventional Commits Version Bump
       uses: paulhatch/semantic-version@v5.3.0
-      id: semver_modules
+      id: semver
       with:
-        change_path: "terraform/modules"
-        namespace: modules
         branch: main
-        tag_prefix: "v"
         bump_each_commit: false
         major_pattern: "(MAJOR)"
         minor_pattern: "(MINOR)"
@@ -28,40 +26,10 @@ jobs:
         enable_prerelease_mode: true
         debug: false
 
-    - name: Apply new version tag for Modules
-      if: steps.semver_modules.outputs.version
+    - name: Apply new version tag 
+      if: steps.semver.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
       with:
-        tag: modules-${{ steps.semver_modules.outputs.version }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  VersionTesting:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: '0'
-    - name: Conventional Commits Version Bump for Testing
-      uses: paulhatch/semantic-version@v5.3.0
-      id: semver_testing
-      with:
-        change_path: "terraform/testing"
-        namespace: testing
-        branch: main
-        tag_prefix: "v"
-        bump_each_commit: false
-        major_pattern: "(MAJOR)"
-        minor_pattern: "(MINOR)"
-        version_format: "${major}.${minor}.${patch}"
-        search_commit_body: true
-        enable_prerelease_mode: true
-        debug: false
-
-    - name: Apply new version tag for Testing
-      if: steps.semver_testing.outputs.version
-      uses: anothrNick/github-tag-action@1.36.0
-      with:
-        tag: testing-${{ steps.semver_testing.outputs.version }}
+        tag: v${{ steps.semver.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
