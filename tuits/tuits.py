@@ -44,7 +44,7 @@ def main():
     # Summary command
     summary_parser = subparsers.add_parser('summary', help='Generate a summary for a specified time frame')
     summary_parser.add_argument('time_frame', choices=['day', 'week', 'month', 'year'], help="Time frame to summarize")
-    summary_parser.add_argument('--api_key', required=True, help='OpenAI API key')
+    summary_parser.add_argument('--api_key', required=False, help='OpenAI API key')
     summary_parser.set_defaults(func=generate_summary)
 
 
