@@ -54,8 +54,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.semver.outputs.version }}
-          release_name: Release ${{ steps.semver.outputs.version }}
+          tag_name: "v${{ steps.semver.outputs.version }}"
+          release_name: "Release v${{ steps.semver.outputs.version }}"
           draft: false
-          prerelease: false
+          prerelease: true
           body: ${{ env.commit_messages }}
