@@ -22,8 +22,7 @@ jobs:
         version_format: "${major}.${minor}.${patch}"
         search_commit_body: true
         enable_prerelease_mode: true
-        tag_prefix: "v"
-        debug: true
+        debug: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -32,4 +31,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        TAG: ${{ steps.semver.outputs.version }}
+        TAG: "v${{ steps.semver.outputs.version }}"
+
