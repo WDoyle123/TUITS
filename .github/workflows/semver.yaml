@@ -17,7 +17,6 @@ jobs:
       id: semver
       with:
         branch: main
-        tag_prefix: "v"
         bump_each_commit: false
         major_pattern: "(MAJOR)"
         minor_pattern: "(MINOR)"
@@ -30,6 +29,6 @@ jobs:
       if: steps.semver.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
       with:
-        tag: ${{ steps.semver.outputs.version }}
+        tag: v${{ steps.semver.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
