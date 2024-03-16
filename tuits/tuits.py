@@ -4,6 +4,7 @@ from tuits.cli.show_tasks import show_tasks
 from tuits.cli.start import start_day
 from tuits.cli.finish import finish_day
 from tuits.cli.backup import backup_tasks
+from tuits.cli.summary import generate_summary
 
 from tuits.data.init_db import init_db
 
@@ -39,6 +40,13 @@ def main():
     backup_parser = subparsers.add_parser('backup', help="Backup the database")
     backup_parser.add_argument('job', choices=['save', 'load'], help="Operation to perform: save or load the database")
     backup_parser.set_defaults(func=backup_tasks)
+
+    # Summary command
+    summary_parser = subparsers.add_parser('summary', help='Generate a summary for a specified time frame')
+    summary_parser.add_argument('time_frame', choices=['day', 'week', 'month', 'year'], help="Time frame to summarize")
+    summary_parser.add_argument('--api_key', required=False, help='OpenAI API key')
+    summary_parser.set_defaults(func=generate_summary)
+
 
     args = parser.parse_args()
     if hasattr(args, 'func'):

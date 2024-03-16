@@ -15,7 +15,8 @@ setup(
         'tuits': ['data/*.db'],
     },
     install_requires=[
-        'tabulate'
+        'tabulate',
+        'openai'
     ],
     entry_points={
         'console_scripts': [

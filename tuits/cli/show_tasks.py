@@ -3,6 +3,28 @@ import os
 from datetime import datetime, timedelta
 from tabulate import tabulate
 
+def get_tasks_text_for_time_frame(time_frame):
+    start_date = get_start_date(time_frame)
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    database_path = os.path.join(base_dir, 'data', 'tuits.db')
+
+    conn = sqlite3.connect(database_path)
+    cursor = conn.cursor()
+
+    start_date_str = start_date.strftime("%Y-%m-%d %H:%M")
+
+    query = "SELECT job, message FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
+    cursor.execute(query, (start_date_str,))
+
+    rows = cursor.fetchall()
+
+    tasks_text = '\n'.join([f"{row[0]}: {row[1]}" for row in rows])
+
+    conn.close()
+
+    return tasks_text
+
 def get_start_date(date_range):
     now = datetime.now()
 

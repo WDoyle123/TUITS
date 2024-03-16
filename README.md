@@ -1,6 +1,6 @@
 # TUITS - Terminal User Interface Time Sheet
 
-TUITS is a simple, command-line based tool designed to help you log your work hours with ease. Using simple commands, you can log tasks, view completed tasks over different time periods, and manage your workday start and end times. TUITS stores your logs in an SQLite database for easy tracking and management.
+TUITS is a simple, command-line based tool designed to help you log your work hours with ease. Using simple commands, you can log tasks, view completed tasks over different time periods, and manage your workday start and end times.TUITS also utilise gpt3.5-turbo for ai generated summarys of different time frames. TUITS stores your logs in an SQLite database for easy tracking and management.
 
 ## Setup
 
@@ -26,6 +26,7 @@ Here is a list of available command in TUITS and how to use them:
 - `finish`
 - `show`
 - `backup`
+- `summary`
 
 ### Start Your Day
 To start logging your workday, simply run:
@@ -80,3 +81,11 @@ tuits backup <operation>
 
 with `save` or `load`.
 
+### AI Generated Summary
+You can use TUITS to generate an ai generated summary of the selected time frame:
+
+```
+tuits summary month --api_key <api_key>
+```
+
+Upon entering the api once, this `api_key` will be stored in a config file. Allowing you to run this command again without the flag.
