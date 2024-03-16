@@ -1,40 +1,67 @@
-name: Auto Tag my Application
+name: Auto Tag Application with SemVer
 on:
   push:
     branches:
       - main
+
 concurrency: production
 jobs:
-  Patch:
+  VersionModules:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'
-    - name: Minor version for each merge
-      id: taggerDryRun
+    - name: Conventional Commits Version Bump for Modules
+      uses: paulhatch/semantic-version@v5.3.0
+      id: semver_modules
+      with:
+        change_path: "terraform/modules"
+        namespace: modules
+        branch: main
+        tag_prefix: "v"
+        bump_each_commit: false
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+        version_format: "${major}.${minor}.${patch}"
+        search_commit_body: true
+        enable_prerelease_mode: true
+        debug: false
+
+    - name: Apply new version tag for Modules
+      if: steps.semver_modules.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
+      with:
+        tag: modules-${{ steps.semver_modules.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-        DRY_RUN: true
 
-    - name: echo new tag
-      run: |
-        echo "The next tag version will be: ${{ steps.taggerDryRun.outputs.new_tag }}"
-    - name: echo tag
-      run: |
-        echo "The current tag is: ${{ steps.taggerDryRun.outputs.tag }}"
-    - name: echo part
-      run: |
-        echo "The version increment was: ${{ steps.taggerDryRun.outputs.part }}"
-    # DO MY BUILD HERE
-    # IN CASE OF FAILURE, THE STEP BELOW WILL NOT RUN.
-    
+  VersionTesting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: Conventional Commits Version Bump for Testing
+      uses: paulhatch/semantic-version@v5.3.0
+      id: semver_testing
+      with:
+        change_path: "terraform/testing"
+        namespace: testing
+        branch: main
+        tag_prefix: "v"
+        bump_each_commit: false
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+        version_format: "${major}.${minor}.${patch}"
+        search_commit_body: true
+        enable_prerelease_mode: true
+        debug: false
 
-    - name: Minor version for each merge
-      id: taggerFinal
+    - name: Apply new version tag for Testing
+      if: steps.semver_testing.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
+      with:
+        tag: testing-${{ steps.semver_testing.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
