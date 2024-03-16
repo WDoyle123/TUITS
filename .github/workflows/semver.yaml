@@ -8,21 +8,53 @@ jobs:
   Version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3 
-      with:
-        fetch-depth: '0'
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
-    - name: Conventional Commits Version Bump
-      uses: paulhatch/semantic-version@v5.4.0 
-      with:
-        branch: main
-        bump_each_commit: false
-        major_pattern: "(MAJOR)"
-        minor_pattern: "(MINOR)"
-        version_format: "${major}.${minor}.${patch}"
-        search_commit_body: true
-        enable_prerelease_mode: true
-        tag_prefix: "v"
-        debug: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Conventional Commits Version Bump
+        id: semver
+        uses: paulhatch/semantic-version@v5.4.0 
+        with:
+          branch: main
+          bump_each_commit: false
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          version_format: "${major}.${minor}.${patch}"
+          search_commit_body: true
+          enable_prerelease_mode: true
+          tag_prefix: "v"
+          debug: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Commit Messages
+        id: get_commits
+        run: |
+          # Fetch all tags
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          # Check if there are any tags in the repository
+          TAG_COUNT=$(git tag | wc -l)
+          if [ "$TAG_COUNT" -eq "0" ]; then
+            # No tags exist, get all commit messages
+            COMMIT_MESSAGES=$(git log --pretty=format:"%h - %s")
+          else
+            # Get the latest tag name
+            LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+            # Get commit messages since the latest tag
+            COMMIT_MESSAGES=$(git log ${LATEST_TAG}..HEAD --pretty=format:"%h - %s")
+          fi
+          # Set the commit messages as output
+          echo "::set-output name=messages::$COMMIT_MESSAGES"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semver.outputs.version }}
+          release_name: Release ${{ steps.semver.outputs.version }}
+          draft: false
+          prerelease: false
+          body: ${{ steps.get_commits.outputs.messages }}
+
