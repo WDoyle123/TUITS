@@ -8,13 +8,12 @@ jobs:
   Version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3 
       with:
         fetch-depth: '0'
 
     - name: Conventional Commits Version Bump
-      uses: paulhatch/semantic-version@v5.3.0
-      id: semver
+      uses: paulhatch/semantic-version@v5.4.0 
       with:
         branch: main
         bump_each_commit: false
@@ -23,13 +22,14 @@ jobs:
         version_format: "${major}.${minor}.${patch}"
         search_commit_body: true
         enable_prerelease_mode: true
+        tag_prefix: "v"
         debug: true
-        tag_prefix: "v" 
-
-    - name: Apply new version tag 
-      uses: anothrNick/github-tag-action@1.36.0
-      with:
-        tag: ${{ steps.semver.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Apply new version tag 
+      uses: anothrNick/github-tag-action@1.67.0  
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        TAG: ${{ steps.semver.outputs.version }}
