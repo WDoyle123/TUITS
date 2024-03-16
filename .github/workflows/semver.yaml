@@ -26,12 +26,3 @@ jobs:
         debug: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Apply new version tag 
-      uses: anothrNick/github-tag-action@1.67.0  
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag: ${{ steps.semver.outputs.version }}
-
-
