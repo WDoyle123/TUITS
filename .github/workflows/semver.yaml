@@ -30,6 +30,6 @@ jobs:
       if: steps.semver.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
       with:
-        tag: modules-${{ steps.semver.outputs.version }}
+        tag: ${{ steps.semver.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
