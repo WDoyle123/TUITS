@@ -28,10 +28,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug Repository Status
+        run: |
+          echo "Repository Tags:"
+          git tag
+          echo "Latest Commit:"
+          git log -1
+
       - name: Get Commit Messages
         id: get_commits
         run: |
-          git fetch --prune --unshallow
           TAG_COUNT=$(git tag | wc -l)
           if [ "$TAG_COUNT" -eq "0" ]; then
             COMMIT_MESSAGES=$(git log --pretty=format:"%h - %s")
