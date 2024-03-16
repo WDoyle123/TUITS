@@ -23,6 +23,7 @@ jobs:
           version_format: "${major}.${minor}.${patch}"
           search_commit_body: true
           enable_prerelease_mode: true
+
           debug: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,4 +64,3 @@ jobs:
           draft: false
           prerelease: false
           body: ${{ env.commit_messages }}
-
