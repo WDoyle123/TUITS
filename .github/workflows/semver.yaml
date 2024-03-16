@@ -23,7 +23,7 @@ jobs:
           version_format: "${major}.${minor}.${patch}"
           search_commit_body: true
           enable_prerelease_mode: true
-          tag_prefix: "v"
+
           debug: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,13 +49,18 @@ jobs:
           echo "$COMMIT_MESSAGES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Prepend v to version
+        run: |
+          echo "FULL_VERSION=v${{ steps.semver.outputs.version }}" >> $GITHUB_ENV
+          echo $FULL_VERSION
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.semver.outputs.version }}
-          release_name: Release ${{ steps.semver.outputs.version }}
+          tag_name: ${{ env.FULL_VERSION }}
+          release_name: Release ${{ env.FULL_VERSION }}
           draft: false
           prerelease: false
           body: ${{ env.commit_messages }}
