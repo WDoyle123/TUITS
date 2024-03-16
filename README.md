@@ -18,6 +18,14 @@ python3 setup.py install
 ```
 
 ## Usage
+Here is a list of available command in TUITS and how to use them:
+
+### Commands
+- `log`
+- `start`
+- `finish`
+- `show`
+- `backup`
 
 ### Start Your Day
 To start logging your workday, simply run:
@@ -26,23 +34,28 @@ To start logging your workday, simply run:
 tuits start
 ```
 
-This command creates a new record for the day indicting a start time.
-
 ### Logging Tasks 
-To log a task use `log` command with a job and message:
+To log a task use `log` command with a job and optional message:
 
 ```
 tuits log 'ExampleJob' -m 'Example message describing the task complete'
+```
+
+### Finish Your Day
+To log the end of your workday:
+
+```
+tuits Finish
 ```
 
 ### Viewing Logged Tasks 
 You can view tasks you have completed within different time frames:
 
 ```
-tuits show day 
+tuits show <time_frame>
 ```
+`<time_frame>` - `day`, `week`, `month`, `year`.
 
-Replace day with week, month or year to view tasks completed within those time frames.
 Here is an example of the output:
 
 ```
@@ -57,3 +70,13 @@ Here is an example of the output:
 | Start  | ##########                                     | 09:00 |
 
 ```
+
+### Backing Up the Database
+To backup or load the database use:
+
+```
+tuits backup <operation>
+```
+
+with `save` or `load`.
+
