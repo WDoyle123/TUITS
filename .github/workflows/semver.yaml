@@ -23,6 +23,7 @@ jobs:
         search_commit_body: true
         enable_prerelease_mode: true
         tag_prefix: "v"
+        debug: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
