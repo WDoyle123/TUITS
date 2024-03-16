@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'
-
+        
     - name: Conventional Commits Version Bump
       uses: paulhatch/semantic-version@v5.3.0
       id: semver
@@ -21,15 +21,19 @@ jobs:
         bump_each_commit: false
         major_pattern: "(MAJOR)"
         minor_pattern: "(MINOR)"
+        patch_pattern: "(PATCH)"
         version_format: "${major}.${minor}.${patch}"
         search_commit_body: true
         enable_prerelease_mode: true
         debug: false
 
+
     - name: Apply new version tag 
       if: steps.semver.outputs.version
       uses: anothrNick/github-tag-action@1.36.0
       with:
-        tag: v${{ steps.semver.outputs.version }}
+        tag: "v${{ steps.semver.outputs.version }}" 
+        fail_on_existing_tag: false 
+        overwrite_existing_tag: true 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
