@@ -5,6 +5,7 @@ from tuits.cli.start import start_day
 from tuits.cli.finish import finish_day
 from tuits.cli.backup import backup_tasks
 from tuits.cli.summary import generate_summary
+from tuits.cli.remove import remove_tasks
 
 from tuits.data.init_db import init_db
 
@@ -47,6 +48,9 @@ def main():
     summary_parser.add_argument('--api_key', required=False, help='OpenAI API key')
     summary_parser.set_defaults(func=generate_summary)
 
+    # Remove command
+    remove_parser = subparsers.add_parser('remove', help='Remove a log from the tuits.db')
+    remove_parser.set_defaults(func=remove_tasks)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
