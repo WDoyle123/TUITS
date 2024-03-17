@@ -27,6 +27,7 @@ Here is a list of available command in TUITS and how to use them:
 - `show`
 - `backup`
 - `summary`
+- 'remove'
 
 ### Start Your Day
 To start logging your workday, simply run:
@@ -72,6 +73,8 @@ Here is an example of the output:
 
 ```
 
+You can also use the `-i` flag for adding a column for the ids of the job.
+
 ### Backing Up the Database
 To backup or load the database use:
 
@@ -89,3 +92,12 @@ tuits summary month --api_key <api_key>
 ```
 
 Upon entering the api once, this `api_key` will be stored in a config file. Allowing you to run this command again without the flag.
+
+### Removing a Log 
+To remove a log from the tuits.db:
+
+```
+tuits remove
+```
+
+You will then be prompted for the id of the job. See tuits show to find that!
