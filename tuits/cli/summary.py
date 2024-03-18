@@ -19,7 +19,6 @@ def load_api_key():
     return None
 
 def generate_summary(args):
-
     # Check if the API key is provided; if so, save it. Otherwise, attempt to load it.
     if args.api_key:
         save_api_key(args.api_key)
@@ -27,16 +26,34 @@ def generate_summary(args):
     else:
         api_key = load_api_key()
         if not api_key:
-            print("No API key found. Please provide an API key.")
+            print("No API key found. Please provide an API key. e.g., tuits summary day --api_key <api_key>")
             return
 
+    # Initialize the OpenAI client with the API key.
     client = OpenAI(api_key=api_key)
 
+    # Retrieve the tasks text for the specified time frame.
     tasks_text = get_tasks_text_for_time_frame(args.time_frame)
 
-    response = client.chat.completions.create(model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user", "content": f"Summarize the following tasks so that I can let the team know what I have done in this {args.time_frame} in the daily meeting: {tasks_text}"}
-    ])
+    prompt = (
+        f"Using the tasks listed below, create a compelling and concise summary suitable for a {args.time_frame} type meeting. "
+        "The summary should: \n"
+        "- Highlight key accomplishments and progress made. \n"
+        "- Identify any blockers or challenges faced. \n"
+        "- Outline the next steps or tasks to focus on. \n"
+        "- Be in first person and not use 'We' but only use 'I' \n"
+        "- You SHOULD EXCLUDE jobs that are: 'Start' 'Finish' and 'Break' from the summary \n"
+        "Please group related tasks together to provide a coherent narrative. \n\n"
+        "Tasks: \n"
+        f"{tasks_text}"
+    )
 
+    # Generate the summary by sending the prompt to the model.
+    response = client.chat.completions.create(model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": prompt}
+        ])
+
+    # Print the generated summary.
     print("Summary for", args.time_frame, ":\n", response.choices[0].message.content)
+
