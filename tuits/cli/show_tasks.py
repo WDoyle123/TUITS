@@ -34,8 +34,8 @@ def get_start_date(date_range):
 
     # Example date_range = week. We only show logs from Monday until the time now
     elif date_range == 'week':
-        start_date = now - timedelta(days=now.weekday())
-        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        start_of_week = now - timedelta(days=now.weekday())
+        start_date = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     
     # Example date_range = month. We only show logs from beginning of the month until now
     elif date_range == 'month':
@@ -50,14 +50,24 @@ def get_start_date(date_range):
 
     return start_date
 
-def format_output(row, date_range, include_id=False):
+def format_output(row, date_range, include_id=False, max_message_length=0):
+
     # Extract information from the row.
     id, job, message, timestamp_str = row
 
     # Parse the timestamp string from the database format to a datetime object
     timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
 
-    # Initialize the output list, conditionally including the ID
+    # Check if job is one of the specified types and adjust message if necessary
+    if job in ["Start", "Finish"] and (message == "" or message.startswith("###")):
+        # Replace message with a string of '#' characters matching the length of the longest message
+        message = "#" * max_message_length
+
+    if job in ["Break"] and (message == "" or message.startswith("###")):
+        # Replace message with a string of '-' characters matching the length of the longest message
+        message = "/" * max_message_length
+
+    # Initialise the output list, conditionally including the ID
     output = [id] if include_id else []
 
     # Add job and message based on the date_range
@@ -81,7 +91,7 @@ def show_tasks(args):
 
     # locate database
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    database_path = os.path.join(base_dir,'data', 'tuits.db')
+    database_path = os.path.join(base_dir, 'data', 'tuits.db')
 
     conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
@@ -92,21 +102,21 @@ def show_tasks(args):
         print(e)
         return
 
-    if start_date is None:
-        print(f"Error: start_date is None for date_range '{date_range}")
-        return
-    
     query = "SELECT * FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
-    start_date_str = start_date.strftime("%Y-%m-%d %H:%M")  # Adjust format to YYYY-MM-DD for better compatibility
+    start_date_str = start_date.strftime("%Y-%m-%d %H:%M")
     cursor.execute(query, (start_date_str,))
 
     rows = cursor.fetchall()
-    formatted_rows = [format_output(row, date_range, args.identifier) for row in rows]
+
+    # Find the length of the longest message meeting the specified conditions
+    max_message_length = max((len(row[2]) for row in rows if row[2] == "" or row[2].startswith("###") or row[1] not in ["Start", "Finish", "Break"]), default=0)
+
+    formatted_rows = [format_output(row, date_range, args.identifier, max_message_length) for row in rows]
 
     # Determine headers based on the date range and identifier
     headers = ["Job", "Message", "Time", "Day"] if date_range == 'week' else ["Job", "Message", "Time", "Date"]
     if args.identifier:
-        headers.insert(0, "ID")  
+        headers.insert(0, "ID")
 
     print(tabulate(formatted_rows, headers=headers, tablefmt="grid"))
 
