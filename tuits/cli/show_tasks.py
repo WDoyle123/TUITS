@@ -34,8 +34,8 @@ def get_start_date(date_range):
 
     # Example date_range = week. We only show logs from Monday until the time now
     elif date_range == 'week':
-        start_date = now - timedelta(days=now.weekday())
-        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        start_of_week = now - timedelta(days=now.weekday())
+        start_date = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     
     # Example date_range = month. We only show logs from beginning of the month until now
     elif date_range == 'month':
