@@ -65,7 +65,7 @@ def format_output(row, date_range, include_id=False, max_message_length=0):
 
     if job in ["Break"] and (message == "" or message.startswith("###")):
         # Replace message with a string of '-' characters matching the length of the longest message
-        message = "-" * max_message_length
+        message = "/" * max_message_length
 
     # Initialise the output list, conditionally including the ID
     output = [id] if include_id else []
