@@ -85,6 +85,15 @@ def format_output(row, date_range, include_id=False, max_message_length=0):
 
     return output
 
+def get_terminal_size(include_id=False):
+    try:
+        size = os.get_terminal_size()
+        space = 50 if include_id else 65  
+        usable_width = max(size.columns - space, 20) 
+        return usable_width
+    except OSError:
+        return 80  
+
 def show_tasks(args):
     # Get the args from the command
     date_range = args.show
@@ -108,8 +117,7 @@ def show_tasks(args):
 
     rows = cursor.fetchall()
 
-    # Find the length of the longest message meeting the specified conditions
-    max_message_length = max((len(row[2]) for row in rows if row[2] == "" or row[2].startswith("###") or row[1] not in ["Start", "Finish", "Break"]), default=0)
+    max_message_length = get_terminal_size(args.identifier)
 
     formatted_rows = [format_output(row, date_range, args.identifier, max_message_length) for row in rows]
 
@@ -118,6 +126,6 @@ def show_tasks(args):
     if args.identifier:
         headers.insert(0, "ID")
 
-    print(tabulate(formatted_rows, headers=headers, tablefmt="grid"))
+    print(tabulate(formatted_rows, headers=headers, tablefmt="grid", maxcolwidths=[None, get_terminal_size(args.identifier)]))
 
     conn.close()
