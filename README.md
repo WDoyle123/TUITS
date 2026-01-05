@@ -17,6 +17,22 @@ cd tuits
 python3 setup.py install
 ```
 
+### Installation (recommended)
+Homebrew Python uses PEP 668 and blocks system-wide installs. Use a virtual environment or pipx instead.
+
+**Option 1: virtualenv (best for development)**
+```
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+```
+
+**Option 2: pipx (best for CLI installs)**
+```
+brew install pipx
+pipx install .
+```
+
 ## Usage
 Here is a list of available command in TUITS and how to use them:
 
@@ -27,7 +43,10 @@ Here is a list of available command in TUITS and how to use them:
 - `show`
 - `backup`
 - `summary`
-- 'remove'
+- `remove`
+- `edit`
+- `last`
+- `undo`
 
 ### Start Your Day
 To start logging your workday, simply run:
@@ -43,11 +62,24 @@ To log a task use `log` command with a job and optional message:
 tuits log 'ExampleJob' -m 'Example message describing the task complete'
 ```
 
+For interactive logging (prompts + quick repeat), run without args:
+
+```
+tuits log
+```
+
+Optional time helpers:
+
+```
+tuits log 'ExampleJob' -m 'Late entry' --at 10:15
+tuits log 'ExampleJob' -m 'Backdated' --mins -30
+```
+
 ### Finish Your Day
 To log the end of your workday:
 
 ```
-tuits Finish
+tuits finish
 ```
 
 ### Viewing Logged Tasks 
@@ -91,7 +123,7 @@ You can use TUITS to generate an ai generated summary of the selected time frame
 tuits summary month --api_key <api_key>
 ```
 
-Upon entering the api once, this `api_key` will be stored in a config file. Allowing you to run this command again without the flag.
+By default, the API key is stored securely in your OS keychain (via `keyring`). You can also set `OPENAI_API_KEY` to avoid prompts.
 
 ### Removing a Log 
 To remove a log from the tuits.db:
@@ -100,4 +132,36 @@ To remove a log from the tuits.db:
 tuits remove
 ```
 
-You will then be prompted for the id of the job. See tuits show to find that!
+You will then be prompted for the entry number or ID. See tuits show to find that!
+
+You can also remove specific IDs directly:
+
+```
+tuits remove --ids 12,13
+```
+
+### Editing a Log
+To edit a recent log entry:
+
+```
+tuits edit
+```
+
+You can also edit a specific entry by ID:
+
+```
+tuits edit --id 12
+```
+
+### Show Last or Undo
+To show the most recent entry:
+
+```
+tuits last
+```
+
+To remove the most recent entry:
+
+```
+tuits undo
+```

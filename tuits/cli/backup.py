@@ -1,6 +1,8 @@
 import os
 import shutil
 
+from tuits.data.db import get_db_path
+
 def backup_tasks(args):
     job_name = args.job
 
@@ -21,8 +23,7 @@ def backup_tasks(args):
                 continue
 
             try:
-                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                source_database_path = os.path.join(base_dir, 'data', database_filename)
+                source_database_path = get_db_path()
                 backup_database_path = path
                 shutil.copyfile(source_database_path, backup_database_path)
                 print(f"Database saved successfully to: {backup_database_path}")
@@ -36,8 +37,7 @@ def backup_tasks(args):
                 continue
 
             try:
-                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                target_database_path = os.path.join(base_dir, 'data', database_filename)
+                target_database_path = get_db_path()
                 shutil.copyfile(path, target_database_path)
                 print(f"Database loaded successfully from: {path}")
                 break  # Exit loop after successful operation

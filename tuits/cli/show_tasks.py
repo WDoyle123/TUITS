@@ -3,18 +3,18 @@ import os
 from datetime import datetime, timedelta
 from tabulate import tabulate
 
+from tuits.data.db import get_db_path
 def get_tasks_text_for_time_frame(time_frame):
     start_date = get_start_date(time_frame)
 
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    database_path = os.path.join(base_dir, 'data', 'tuits.db')
+    database_path = get_db_path()
 
     conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
 
     start_date_str = start_date.strftime("%Y-%m-%d %H:%M")
 
-    query = "SELECT job, message FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
+    query = "SELECT job, message FROM tasks WHERE timestamp >= ? ORDER BY timestamp DESC"
     cursor.execute(query, (start_date_str,))
 
     rows = cursor.fetchall()
@@ -99,8 +99,7 @@ def show_tasks(args):
     date_range = args.show
 
     # locate database
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    database_path = os.path.join(base_dir, 'data', 'tuits.db')
+    database_path = get_db_path()
 
     conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
@@ -111,7 +110,7 @@ def show_tasks(args):
         print(e)
         return
 
-    query = "SELECT * FROM tasks WHERE date(timestamp) >= date(?) ORDER BY timestamp DESC"
+    query = "SELECT * FROM tasks WHERE timestamp >= ? ORDER BY timestamp DESC"
     start_date_str = start_date.strftime("%Y-%m-%d %H:%M")
     cursor.execute(query, (start_date_str,))
 

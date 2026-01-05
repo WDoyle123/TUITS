@@ -1,8 +1,9 @@
 import sqlite3
-from pkg_resources import resource_filename
 
-def init_db():
-    db_path = resource_filename('tuits.data', 'tuits.db')
+from tuits.data.db import get_db_path
+
+def init_db(db_path=None):
+    db_path = db_path or get_db_path()
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
@@ -15,4 +16,3 @@ def init_db():
                    ''')
     conn.commit()
     conn.close()
-

@@ -16,7 +16,10 @@ setup(
     },
     install_requires=[
         'tabulate',
-        'openai'
+        'openai',
+        'keyring',
+        'llama-cpp-python',
+        'huggingface_hub'
     ],
     entry_points={
         'console_scripts': [

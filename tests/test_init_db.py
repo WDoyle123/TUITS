@@ -23,7 +23,7 @@ class TestDBInit(unittest.TestCase):
 
     def test_db_and_table_creation(self):
         # Initialise the database
-        init_db()
+        init_db(self.db_path)
 
         # Connect to the database
         conn = sqlite3.connect(self.db_path)
@@ -62,4 +62,3 @@ class TestDBInit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

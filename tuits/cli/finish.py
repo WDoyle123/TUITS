@@ -1,11 +1,11 @@
 import sqlite3
-import os
 from datetime import datetime
+
+from tuits.data.db import get_db_path
 
 def finish_day(args=None):
     # locate database
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    database_path = os.path.join(base_dir,'data', 'tuits.db')
+    database_path = get_db_path()
 
     conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
