@@ -2,33 +2,12 @@
 
 TUITS is a simple, command-line based tool designed to help you log your work hours with ease. Using simple commands, you can log tasks, view completed tasks over different time periods, and manage your workday start and end times.TUITS also utilise gpt3.5-turbo for ai generated summarys of different time frames. TUITS stores your logs in an SQLite database for easy tracking and management.
 
-## Setup
+## Installation (pipx)
+TUITS is a CLI tool. Install it with pipx so it is isolated and easy to upgrade.
 
-To get started with TUITS, you'll need to have Python 3 installed on your system. Once you have Python 3, follow these steps to set up TUITS:
-
-1. **Clone TUITS**: 
 ```
 git clone https://github.com/wdoyle123/tuits.git
-```
-
-2. **Install TUITS**:
-```
-cd tuits 
-python3 setup.py install
-```
-
-### Installation (recommended)
-Homebrew Python uses PEP 668 and blocks system-wide installs. Use a virtual environment or pipx instead.
-
-**Option 1: virtualenv (best for development)**
-```
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e .
-```
-
-**Option 2: pipx (best for CLI installs)**
-```
+cd tuits
 brew install pipx
 pipx install .
 ```
@@ -117,13 +96,14 @@ tuits backup <operation>
 with `save` or `load`.
 
 ### AI Generated Summary
-You can use TUITS to generate an ai generated summary of the selected time frame:
+TUITS can generate standup summaries using a local on-demand model (default) or OpenAI (optional).
 
 ```
-tuits summary month --api_key <api_key>
+tuits summary month
 ```
 
-By default, the API key is stored securely in your OS keychain (via `keyring`). You can also set `OPENAI_API_KEY` to avoid prompts.
+By default it uses a local model via `llama-cpp-python` and downloads the GGUF on first run.  
+To use OpenAI instead, set `TUIT_LLM_PROVIDER=openai` and provide an API key with `--api_key` or `OPENAI_API_KEY` (stored in your OS keychain via `keyring`).
 
 ### Removing a Log 
 To remove a log from the tuits.db:
